@@ -71,11 +71,7 @@ defmodule GameOfLife do
   defp generate_grid(x, y) do
     y_range = (y - 1)..(y + 1)
     (x - 1)..(x + 1)
-    |> Enum.flat_map(fn x_val -> Enum.map(y_range, make_coordinate_with_x(x_val)) end)
+    |> Enum.flat_map(fn x_val -> Enum.map(y_range, fn y_val -> %{x: x_val, y: y_val} end) end)
     |> Enum.to_list
-  end
-
-  defp make_coordinate_with_x(x) do
-    fn y -> %{x: x, y: y} end
   end
 end
