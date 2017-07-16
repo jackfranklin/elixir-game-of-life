@@ -47,13 +47,21 @@ defmodule GameOfLife do
   end
 
   def cell_should_die?(game, cell) do
-    neighbours = neighbours_of_cell(game, cell)
-    Enum.count(neighbours) < 2 || Enum.count(neighbours) > 3
+    neighbour_count = neighbour_count_for_cell(game, cell)
+    case neighbour_count do
+      2 -> false
+      3 -> false
+      _ -> true
+    end
+  end
+
+  def neighbour_count_for_cell(game, cell) do
+    Enum.count(neighbours_of_cell(game, cell))
   end
 
   def cell_should_come_alive?(game, cell) do
-    neighbours = neighbours_of_cell(game, cell)
-    Enum.count(neighbours) == 3 && cell_is_alive?(game, cell) == false
+    neighbour_count = neighbour_count_for_cell(game, cell)
+    neighbour_count == 3 && cell_is_alive?(game, cell) == false
   end
 
   def cell_is_alive?(game, cell) do
