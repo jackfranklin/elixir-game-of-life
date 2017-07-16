@@ -1,4 +1,4 @@
-defmodule Gameoflife.Mixfile do
+defmodule GameOfLife.Mixfile do
   use Mix.Project
 
   def project do
