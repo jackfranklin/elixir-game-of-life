@@ -14,7 +14,7 @@ defmodule GameOfLife do
   end
 
   def kill_living_cells(game) do
-    Enum.filter(game.board, fn cell -> cell_should_die?(game, cell) == false end)
+    Enum.filter(game.board, &(cell_should_die?(game, &1) == false))
   end
 
   def neighbours?(%{x: x1, y: y1} = cell1, %{x: x2, y: y2} = cell2) do
@@ -24,7 +24,7 @@ defmodule GameOfLife do
   defp get_new_cells(game) do
     game.board
     |> Enum.flat_map(&potential_neighbours_for_cell/1)
-    |> Enum.filter(fn cell -> cell_should_come_alive?(game, cell) end)
+    |> Enum.filter(&(cell_should_come_alive?(game, &1)))
     |> Enum.uniq
   end
 
@@ -38,7 +38,7 @@ defmodule GameOfLife do
     potential_neighbours = potential_neighbours_for_cell(cell)
     board
     |> Enum.filter(fn board_cell -> cells_equal?(cell, board_cell) == false end)
-    |> Enum.filter(fn board_cell -> Enum.member?(potential_neighbours, board_cell) end)
+    |> Enum.filter(&(Enum.member?(potential_neighbours, &1)))
   end
 
 
