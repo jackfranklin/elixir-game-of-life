@@ -136,4 +136,16 @@ defmodule GameoflifeTest do
     final_game = GameOfLife.tick(new_game)
     assert game_has_cells(final_game, original_cells)
   end
+
+  test "when the game ticks it updates the count" do
+    original_cells = [
+      %{x: -1, y: 0},
+      %{x: 0, y: 0},
+      %{x: 1, y: 0},
+    ]
+    game = GameOfLife.new_game(original_cells)
+    final_game = game |> GameOfLife.tick |> GameOfLife.tick |> GameOfLife.tick
+    assert final_game.ticks == 3
+
+  end
 end

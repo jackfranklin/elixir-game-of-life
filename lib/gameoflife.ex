@@ -3,14 +3,18 @@ defmodule GameOfLife do
   Documentation for Gameoflife.
   """
 
-  def new_game(cells \\ []) do
-    %{board: cells}
+  def new_game(cells \\ [], ticks \\ 0) do
+    %{board: cells, ticks: ticks}
   end
 
   def tick(game) do
-    cells_that_live = Enum.filter(game.board, fn cell -> cell_should_die?(game, cell) == false end)
+    cells_that_live = kill_living_cells(game)
     new_cells = get_new_cells(game)
-    %{board: Enum.concat(cells_that_live, new_cells)}
+    new_game(Enum.concat(cells_that_live, new_cells), game.ticks + 1)
+  end
+
+  def kill_living_cells(game) do
+    Enum.filter(game.board, fn cell -> cell_should_die?(game, cell) == false end)
   end
 
   def neighbours?(%{x: x1, y: y1} = cell1, %{x: x2, y: y2} = cell2) do
@@ -19,9 +23,9 @@ defmodule GameOfLife do
 
   defp get_new_cells(game) do
     game.board
-    |> Enum.flat_map(fn cell -> potential_neighbours_for_cell(cell) end)
-    |> Enum.uniq
+    |> Enum.flat_map(&potential_neighbours_for_cell/1)
     |> Enum.filter(fn cell -> cell_should_come_alive?(game, cell) end)
+    |> Enum.uniq
   end
 
   def potential_neighbours_for_cell(cell) do
